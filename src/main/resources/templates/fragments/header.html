@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+
+    <title th_text="${websiteTitle}">Ranked-Choice Voting</title>
+
+</head>
+<body>
+
+<div class="container">
+    <div th:fragment="header">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light rounded">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#" th:href="@{/}">
+                    <img alt="Group" src="/files/logo.png" th:src="@{/files/logo.png}" height="30"/>
+                </a>
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item"><a class="nav-link" href="#" th:href="@{/race/list}">Races</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>
+</body>
+</html>

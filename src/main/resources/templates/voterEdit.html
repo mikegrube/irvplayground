@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+
+    <!--/*/ <th:block th:include="fragments/headerincl :: head"></th:block> /*/-->
+
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/thymol/latest/thymol.min.js"></script>
+
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+
+    <h2>Voter</h2>
+    <div>
+        <!--suppress HtmlUnknownAttribute, HtmlUnknownAttribute -->
+        <form th:object="${voter}" th:action="@{/voter/save}" method="post">
+
+            <!--suppress HtmlUnknownAttribute -->
+            <input type="hidden" th:field="*{id}"/>
+
+            <div class="form-group row">
+                <label class="control-label">Race:</label>
+                <div>
+                    <!--suppress HtmlUnknownAttribute -->
+                    <select class="form-control" th:field="*{race}">
+                        <option th:each="race : ${races}"
+                                th:value="${race.id}"
+                                th:text="${race.name}"></option>
+                    </select>
+                    <div class="validation-error" th:if="${#fields.hasErrors('race')}" th:errors="*{race}"></div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 control-label">Voter Id:</label>
+                <div class="col-sm-10">
+                    <!--suppress HtmlUnknownAttribute -->
+                    <p class="form-control-static" th:text="${voter.id}"></p>
+                </div>
+            </div>
+
+            <div class="row">
+                <button type="submit" class="btn btn-default">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
+
+

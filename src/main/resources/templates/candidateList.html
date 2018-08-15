@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+
+    <!--/*/ <th:block th:include="fragments/headerincl :: head"></th:block> /*/-->
+
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/thymol/latest/thymol.min.js"></script>
+
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+    <h2>Candidate List</h2>
+
+    <nav class="navbar navbar-expand-lg navbar-light style='background-color: #e3f2fd;' rounded">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    <button type="button" class="btn btn-outline-primary" > <a th:href="${'/candidate/new'}">Add</a> </button>
+                </ul>
+            </div>
+        </div>
+    </div>
+    </nav>
+
+    <table class="table table-striped">
+        <tr>
+            <th>Name</th>
+            <th>Affiliation</th>
+            <th>Race</th>
+            <th>Action</th>
+        </tr>
+        <!--suppress HtmlUnknownAttribute -->
+        <tr th:each="candidate : ${candidates}">
+            <!--suppress HtmlUnknownAttribute -->
+            <td th:text="${candidate.name}"></td>
+            <!--suppress HtmlUnknownAttribute -->
+            <td th:text="${candidate.affiliation}"></td>
+            <!--suppress HtmlUnknownAttribute -->
+            <td th:text="${candidate.race.name}"></td>
+            <td>
+                <!--suppress HtmlUnknownAttribute -->
+                <a th:href="${'/candidate/' + candidate.id}">Show</a>
+                <!--suppress HtmlUnknownAttribute -->
+                <a th:href="${'/candidate/edit/' + candidate.id}" >Edit</a>
+                <!--suppress HtmlUnknownAttribute -->
+                <a th:href="${'/candidate/delete/' + candidate.id}" >Delete</a>
+            </td>
+        </tr>
+    </table>
+
+</div>
+
+</body>
+</html>

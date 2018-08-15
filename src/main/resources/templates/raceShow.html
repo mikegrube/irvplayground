@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+
+    <!--/*/ <th:block th:include="fragments/headerincl :: head"></th:block> /*/-->
+
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/thymol/latest/thymol.min.js"></script>
+
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+
+    <h2>Race</h2>
+
+    <nav class="navbar navbar-expand-lg navbar-light style='background-color: #e3f2fd;' rounded">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    <button type="button" class="btn btn-outline-primary"> <a th:href="${'/race/list'}">List</a> </button>
+                    <button type="button" class="btn btn-outline-primary"> <a th:href="${'/race/new'}">Add</a> </button>
+                    <button type="button" class="btn btn-outline-primary"> <a th:href="${'/race/edit/' + race.id}">Edit</a> </button>
+                    <button type="button" class="btn btn-outline-primary"> <a th:href="${'/race/vote/' + race.id}">Vote</a></button>
+                </ul>
+            </div>
+        </div>
+    </div>
+    </nav>
+
+    <div>
+        <form class="form-horizontal">
+
+            <div class="form-group row">
+                <label class="col-sm-2 control-label">Name:</label>
+                <div class="col-sm-10">
+                    <!--suppress HtmlUnknownAttribute -->
+                    <p class="form-control-static" th:text="${race.name}"></p>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 control-label">Voter Count:</label>
+                <div class="col-sm-10">
+                    <!--suppress HtmlUnknownAttribute -->
+                    <p class="form-control-static" th:text="${race.voterCount}"></p>
+                </div>
+            </div>
+
+            <h3>Candidates</h3>
+            <table class="table table-striped">
+                <tr>
+                    <td/>
+                    <td/>
+                    <td><!--suppress HtmlUnknownAttribute -->
+                        <a th:href="${'/candidate/newWithRace/' + race.id}" >Add</a></td>
+                </tr>
+                <tr>
+                    <th>Name</th>
+                    <th>Affiliation</th>
+                    <th>Action</th>
+                </tr>
+                <!--suppress HtmlUnknownAttribute -->
+                <tr th:each="candidate : ${candidates}">
+                    <!--suppress HtmlUnknownAttribute -->
+                    <td th:text="${candidate.name}"></td>
+                    <!--suppress HtmlUnknownAttribute -->
+                    <td th:text="${candidate.affiliation}">Venue</td>
+                    <td>
+                        <!--suppress HtmlUnknownAttribute -->
+                        <a th:href="${'/candidate/' + candidate.id}">Show</a>
+                        <!--suppress HtmlUnknownAttribute -->
+                        <a th:href="${'/candidate/edit/' + candidate.id}" >Edit</a>
+                        <!--suppress HtmlUnknownAttribute -->
+                        <a th:href="${'/candidate/delete/' + candidate.id}" >Delete</a>
+                    </td>
+                </tr>
+            </table>
+
+            <h3>Voters</h3>
+            <table class="table table-striped">
+                <tr>
+                    <td/>
+                    <td th:each="candidate : ${candidates}">
+                        <span> </span>
+                    </td>
+                    <td>Modify</td>
+                </tr>
+                <tr>
+                    <th>Voter</th>
+                    <th th:each="candidate : ${candidates}">
+                        <span th:text="${candidate.name}"></span>
+                    </th>
+                    <th>Action</th>
+                </tr>
+                <!--suppress HtmlUnknownAttribute -->
+                <tr th:each="voter : ${voters}">
+                    <!--suppress HtmlUnknownAttribute -->
+                    <td th:text="${voter.id}"></td>
+                    <th th:each="rank : ${voter.ranks}">
+                        <span th:text="${rank.rankValue}"></span>
+                    </th>
+                    <td></td>
+                </tr>
+            </table>
+
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

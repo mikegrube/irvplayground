@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+
+    <!--/*/ <th:block th:include="fragments/headerincl :: head"></th:block> /*/-->
+
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/thymol/latest/thymol.min.js"></script>
+
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+    <h2>Rank List</h2>
+
+    <nav class="navbar navbar-expand-lg navbar-light style='background-color: #e3f2fd;' rounded">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav mr-auto">
+                        <button type="button" class="btn btn-outline-primary" > <a th:href="${'/rank/new'}">Add</a> </button>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <table class="table table-striped">
+        <tr>
+            <th>Voter</th>
+            <th>Candidate</th>
+            <th>Rank</th>
+            <th>Action</th>
+        </tr>
+        <!--suppress HtmlUnknownAttribute -->
+        <tr th:each="rank : ${ranks}">
+            <!--suppress HtmlUnknownAttribute -->
+            <td th:text="${rank.candidate.name}"></td>
+            <!--suppress HtmlUnknownAttribute -->
+            <td th:text="${rank.voter}"></td>
+            <!--suppress HtmlUnknownAttribute -->
+            <td th:text="${rank.rankValue}"></td>
+            <td>
+                <!--suppress HtmlUnknownAttribute -->
+                <a th:href="${'/rank/' + rank.id}">Show</a>
+                <!--suppress HtmlUnknownAttribute -->
+                <a th:href="${'/rank/edit/' + rank.id}" >Edit</a>
+                <!--suppress HtmlUnknownAttribute -->
+                <a th:href="${'/rank/delete/' + rank.id}" >Delete</a>
+            </td>
+        </tr>
+    </table>
+
+</div>
+
+</body>
+</html>

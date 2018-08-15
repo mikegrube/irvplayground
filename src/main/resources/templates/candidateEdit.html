@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+
+    <!--/*/ <th:block th:include="fragments/headerincl :: head"></th:block> /*/-->
+
+    <script type="text/javascript" src="http://cdn.jsdelivr.net/thymol/latest/thymol.min.js"></script>
+
+</head>
+<body>
+<div class="container">
+    <!--/*/ <th:block th:include="fragments/header :: header"></th:block> /*/-->
+
+    <h2>Candidate</h2>
+    <div>
+        <!--suppress HtmlUnknownAttribute, HtmlUnknownAttribute -->
+        <form th:object="${candidate}" th:action="@{/candidate/save}" method="post">
+
+            <!--suppress HtmlUnknownAttribute -->
+            <input type="hidden" th:field="*{id}"/>
+
+            <div class="form-group row">
+                <label class="col-sm-2 control-label">Name:</label>
+                <div class="col-sm-10">
+                    <!--suppress HtmlUnknownAttribute -->
+                    <input type="text" class="form-control" th:field="*{name}" autofocus="autofocus" />
+                    <div class="validation-error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="control-label">Affiliation:</label>
+                <div>
+                    <!--suppress HtmlUnknownAttribute -->
+                    <select class="form-control" th:field="*{affiliation}">
+                        <option th:each="affiliation : ${affiliations}"
+                                th:value="${affiliation}"
+                                th:text="${affiliation}"></option>
+                    </select>
+                    <div class="validation-error" th:if="${#fields.hasErrors('affiliation')}" th:errors="*{affiliation}"></div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="control-label">Race:</label>
+                <div>
+                    <!--suppress HtmlUnknownAttribute -->
+                    <select class="form-control" th:field="*{race}">
+                        <option th:each="race : ${races}"
+                                th:value="${race.id}"
+                                th:text="${race.name}"></option>
+                    </select>
+                    <div class="validation-error" th:if="${#fields.hasErrors('race')}" th:errors="*{race}"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <button type="submit" class="btn btn-default">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
+
+

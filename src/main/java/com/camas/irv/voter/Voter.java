@@ -17,7 +17,7 @@ public class Voter {
 	private Race race;
 
 	@Transient
-	List<Rank> ranks;
+	private List<Rank> ranks;
 
 	public Long getId() {
 		return id;

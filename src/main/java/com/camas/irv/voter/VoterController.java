@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @SuppressWarnings("SameReturnValue")
@@ -48,27 +50,44 @@ public class VoterController {
 		return "voterShow";
 	}
 
-	//Create
-
-	@GetMapping("/new")
-	public String create(Model model) {
-
-		model.addAttribute("voter", new Voter());
-		model.addAttribute("races", service.availableRaces());
-
-		return "voterEdit";
-	}
-
 	@PostMapping("/save")
-	public String save(@Valid Voter voter, BindingResult bindingResult) {
+	public String save(@Valid Voter voter, Model model, BindingResult bindingResult) {
 
 		if (bindingResult.hasErrors()) {
+
+			model = prepModelForEdit(model, voter);
 			return "voterEdit";
+		} else {
+			if (!service.validate(voter)) {
+				bindingResult.rejectValue("race", "incorrect.ranking", "Non-zero ranking cannot have duplicates");
+
+				model = prepModelForEdit(model, voter);
+				return "voterEdit";
+			}
+
 		}
 
+		service.applyRanks(voter);
 		voter = service.save(voter);
 
-		return "redirect:/voter/" + voter.getId();
+		return "redirect:/race/" + voter.getRace().getId();
+	}
+
+	private Model prepModelForEdit(Model model, Voter voter) {
+
+		model.addAttribute("voter", voter);
+
+		int candidateCt = service.raceCandidateCt(voter.getRace());
+		List<Integer> nums = new ArrayList<>();
+		nums.add(0);
+		for (int i = 1; i <= candidateCt; i++) {
+			nums.add(i);
+		}
+		model.addAttribute("values", nums);
+
+		model.addAttribute("candidates", service.candidatesForRace(voter.getRace()));
+
+		return model;
 	}
 
 	//Update
@@ -76,8 +95,10 @@ public class VoterController {
 	@GetMapping("/edit/{id}")
 	public String update(@PathVariable Long id, Model model) {
 
-		model.addAttribute("voter", service.get(id));
-		model.addAttribute("races", service.availableRaces());
+		Voter voter = service.get(id);
+		voter.setRanks(service.ranksForVoter(voter));
+
+		model = prepModelForEdit(model, voter);
 
 		return "voterEdit";
 	}

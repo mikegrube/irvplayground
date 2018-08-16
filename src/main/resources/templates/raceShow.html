@@ -84,7 +84,7 @@
                     <td th:each="candidate : ${candidates}">
                         <span> </span>
                     </td>
-                    <td>Modify</td>
+                    <td></td>
                 </tr>
                 <tr>
                     <th>Voter</th>
@@ -100,7 +100,10 @@
                     <th th:each="rank : ${voter.ranks}">
                         <span th:text="${rank.rankValue}"></span>
                     </th>
-                    <td></td>
+                    <td>
+                        <!--suppress HtmlUnknownAttribute -->
+                        <a th:href="${'/voter/edit/' + voter.id}" >Edit</a>
+                    </td>
                 </tr>
             </table>
 

@@ -1,5 +1,6 @@
 package com.camas.irv.voter;
 
+import com.camas.irv.candidate.Candidate;
 import com.camas.irv.candidate.CandidateService;
 import com.camas.irv.race.Race;
 import com.camas.irv.race.RaceService;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -91,6 +93,54 @@ public class VoterServiceImpl implements VoterService {
 			rankService.makeDummyRanks(voter);
 		}
 
+	}
+
+	@Override
+	public int raceCandidateCt(Race race) {
+		return raceService.candidateCountForRace(race);
+	}
+
+	@Override
+	public List<Rank> ranksForVoter(Voter voter) {
+		return rankService.ranksForVoter(voter);
+	}
+
+	@Override
+	public List<Candidate> candidatesForRace(Race race) {
+		return raceService.candidatesForRace(race);
+	}
+
+	@Override
+	public void applyRanks(Voter voter) {
+
+		List<Rank> trueRanks = ranksForVoter(voter);
+
+		for (int i = 0; i < voter.getRanks().size(); i++) {
+			trueRanks.get(i).setRankValue(voter.getRanks().get(i).getRankValue());
+			rankService.save(trueRanks.get(i));
+		}
+	}
+
+	@Override
+	public boolean validate(Voter voter) {
+
+		boolean ok = true;
+
+		List<Rank> ranks = voter.getRanks();
+		List<Integer> usedValue = new ArrayList<>();
+
+		//Check for duplicate rankValues
+		for (Rank rank : ranks) {
+			if (rank.getRankValue() != 0) {
+				if (!usedValue.contains(rank.getRankValue())) {
+					usedValue.add(rank.getRankValue());
+				} else {
+					ok = false;
+				}
+			}
+		}
+
+		return ok;
 	}
 
 }

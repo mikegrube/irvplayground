@@ -81,6 +81,12 @@ public class CandidateServiceImpl implements CandidateService {
 		candidate.setRace(race);
 		save(candidate);
 
+		candidate = new Candidate();
+		candidate.setName("Paula Red");
+		candidate.setAffiliation(Affiliation.RED);
+		candidate.setRace(race);
+		save(candidate);
+
 	}
 
 }

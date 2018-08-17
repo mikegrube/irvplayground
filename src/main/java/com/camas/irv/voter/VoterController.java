@@ -59,7 +59,7 @@ public class VoterController {
 			return "voterEdit";
 		} else {
 			if (!service.validate(voter)) {
-				bindingResult.rejectValue("race", "incorrect.ranking", "Non-zero ranking cannot have duplicates");
+				bindingResult.rejectValue("race", "incorrect.ranking", "Non-zero ranking must be sequential starting at 1.");
 
 				model = prepModelForEdit(model, voter);
 				return "voterEdit";

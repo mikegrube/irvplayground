@@ -23,4 +23,5 @@ public interface RankService {
 	void makeDummyRanks(Voter voter);
 
 	List<Rank> ranksForVoter(Voter voter);
+
 }

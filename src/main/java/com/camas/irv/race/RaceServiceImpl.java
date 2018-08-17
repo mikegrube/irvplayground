@@ -96,4 +96,11 @@ public class RaceServiceImpl implements RaceService {
 		return voterService.votersForRaceWithRanks(race);
 	}
 
+	@Override
+	public RaceResult tabulate(Race race) {
+
+		return new RaceResult(this, voterService, race);
+
+	}
+
 }

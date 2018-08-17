@@ -108,4 +108,18 @@ public class RaceController {
 		return "redirect:/race/list";
 	}
 
+	//Tabulate the results
+
+	@GetMapping("/tabulate/{id}")
+	public String tabulate(@PathVariable Long id, Model model) {
+
+		Race race = service.get(id);
+
+		RaceResult raceResult = service.tabulate(race);
+
+		model.addAttribute("raceResult", raceResult);
+
+		return "raceTabulation";
+	}
+
 }

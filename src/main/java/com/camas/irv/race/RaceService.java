@@ -22,4 +22,6 @@ public interface RaceService {
 	Race makeDummyRace();
 
 	List<Voter> votersForRace(Race race);
+
+	RaceResult tabulate(Race race);
 }

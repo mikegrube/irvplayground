@@ -32,4 +32,6 @@ public interface VoterService {
 	void applyRanks(Voter voter);
 
 	boolean validate(Voter voter);
+
+	Rank rankForOrder(Voter voter, int order);
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 @Service
@@ -67,14 +68,30 @@ public class RankServiceImpl implements RankService {
 	@Override
 	public void makeDummyRanks(Voter voter) {
 
+		int[][] initialRanks = new int[][] {
+				{1, 2, 3},
+				{1, 3, 2},
+				{2, 3, 1},
+				{2, 1, 3},
+				{3, 1, 2},
+				{3, 2, 1},
+				{1, 0, 0},
+				{0, 1, 0},
+				{0, 0, 1}
+		};
+
 		Iterable<Candidate> candidates = candidateService.candidatesforRace(voter.getRace());
 
+		int randNum = ThreadLocalRandom.current().nextInt(0, 9);
+
+		int cct = 0;
 		for (Candidate candidate : candidates) {
 			Rank rank = new Rank();
 			rank.setVoter(voter);
 			rank.setCandidate(candidate);
-			rank.setRankValue(0);
+			rank.setRankValue(initialRanks[randNum][cct]);
 			save(rank);
+			cct++;
 		}
 	}
 

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -140,7 +141,30 @@ public class VoterServiceImpl implements VoterService {
 			}
 		}
 
+		//Rankings must be sequential starting with 1
+		Collections.sort(usedValue);
+		int last = 0;
+		for (Integer i : usedValue) {
+			if (i != last + 1) {
+				ok = false;
+			}
+			last = i;
+		}
+
 		return ok;
+	}
+
+	@Override
+	public Rank rankForOrder(Voter voter, int order) {
+
+		List<Rank> ranks = voter.getRanks();
+		for (Rank rank : ranks) {
+			if (rank.getRankValue() == order) {
+				return rank;
+			}
+		}
+
+		return null;
 	}
 
 }

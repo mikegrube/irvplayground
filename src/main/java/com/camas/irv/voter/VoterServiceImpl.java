@@ -167,4 +167,9 @@ public class VoterServiceImpl implements VoterService {
 		return null;
 	}
 
+	@Override
+	public List<Rank> ranksForVoterByRankValue(Voter voter) {
+		return rankService.ranksForVoterByRank(voter);
+	}
+
 }

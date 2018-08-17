@@ -34,4 +34,6 @@ public interface VoterService {
 	boolean validate(Voter voter);
 
 	Rank rankForOrder(Voter voter, int order);
+
+	List<Rank> ranksForVoterByRankValue(Voter voter);
 }

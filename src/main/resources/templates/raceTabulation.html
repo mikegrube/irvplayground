@@ -13,10 +13,57 @@
 
     <h2>Race Results</h2>
 
+    <nav class="navbar navbar-expand-lg navbar-light style='background-color: #e3f2fd;' rounded">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <div class="collapse navbar-collapse">
+                    <ul class="navbar-nav mr-auto">
+                        <button type="button" class="btn btn-outline-primary"> <a th:href="${'/race/' + raceResult.race.id}">Race Details</a></button>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
     <div>
         <form class="form-horizontal">
 
+        <h3>Race Results (Plurality only)</h3>
+            <table>
+                <tr>
+                    <th>Candidate</th>
+                    <th>Votes</th>
+                </tr>
+                <tr th:each="vote : ${raceResult.pluralityResult}">
+                    <!--suppress HtmlUnknownAttribute -->
+                    <td th:text="${vote.candidate}"></td>
+                    <!--suppress HtmlUnknownAttribute -->
+                    <td th:text="${vote.votes}"></td>
+                </tr>
+            </table>
 
+            <h3>Race Results (IRV)</h3>
+            <table>
+                <tr>
+                    <th>Round</th>
+                </tr>
+                <tr th:each="round, roundIndex : ${raceResult.irvRounds}">
+                    <table>
+                        <tr>
+                            <th th:text="${roundIndex.index}"></th>
+                        </tr>
+                        <tr>
+                            <th>Candidate</th>
+                            <th>Votes</th>
+                        </tr>
+                        <tr th:each="vote : ${round}">
+                            <!--suppress HtmlUnknownAttribute -->
+                            <td th:text="${vote.candidate}"></td>
+                            <!--suppress HtmlUnknownAttribute -->
+                            <td th:text="${vote.votes}"></td>
+                        </tr>
+                    </table>
+            </table>
 
         </form>
     </div>

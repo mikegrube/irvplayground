@@ -8,5 +8,7 @@ import java.util.List;
 interface RankRepository extends CrudRepository<Rank, Long> {
 
 	List<Rank> findByVoterOrderByCandidateName(Voter voter);
+
+	List<Rank> findByVoterOrderByRankValue(Voter voter);
 }
 

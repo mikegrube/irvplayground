@@ -24,4 +24,6 @@ public interface RankService {
 
 	List<Rank> ranksForVoter(Voter voter);
 
+	List<Rank> ranksForVoterByRank(Voter voter);
+
 }

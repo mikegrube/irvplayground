@@ -103,4 +103,12 @@ public class RankServiceImpl implements RankService {
 		return ranks;
 	}
 
+	@Override
+	public List<Rank> ranksForVoterByRank(Voter voter) {
+
+		List<Rank> ranks = repository.findByVoterOrderByRankValue(voter);
+
+		return ranks;
+	}
+
 }

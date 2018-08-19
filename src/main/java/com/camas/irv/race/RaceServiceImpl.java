@@ -103,4 +103,11 @@ public class RaceServiceImpl implements RaceService {
 
 	}
 
+	@Override
+	public void revote(Race race) {
+
+		voterService.revote(race);
+
+	}
+
 }

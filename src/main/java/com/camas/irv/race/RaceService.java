@@ -24,4 +24,6 @@ public interface RaceService {
 	List<Voter> votersForRace(Race race);
 
 	RaceResult tabulate(Race race);
+
+	void revote(Race race);
 }

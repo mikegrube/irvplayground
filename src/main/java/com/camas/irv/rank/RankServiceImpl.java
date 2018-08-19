@@ -111,4 +111,14 @@ public class RankServiceImpl implements RankService {
 		return ranks;
 	}
 
+	@Override
+	public void deleteByVoter(Voter voter) {
+
+		List<Rank> ranks = ranksForVoter(voter);
+		for (Rank rank : ranks) {
+			repository.delete(rank);
+		}
+
+	}
+
 }

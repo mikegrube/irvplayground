@@ -31,10 +31,14 @@
         <h3>Race Results (Plurality only)</h3>
             <table>
                 <tr>
+                    <th th:text="${raceResult.pluralityResult.roundNo}"></th>
+                    <th th:text="(${raceResult.pluralityResult.comment})"></th>
+                </tr>
+                <tr>
                     <th>Candidate</th>
                     <th>Votes</th>
                 </tr>
-                <tr th:each="vote : ${raceResult.pluralityResult}">
+                <tr th:each="vote : ${raceResult.pluralityResult.voteResults}">
                     <!--suppress HtmlUnknownAttribute -->
                     <td th:text="${vote.candidate}"></td>
                     <!--suppress HtmlUnknownAttribute -->
@@ -44,19 +48,17 @@
 
             <h3>Race Results (IRV)</h3>
             <table>
-                <tr>
-                    <th>Round</th>
-                </tr>
-                <tr th:each="round, roundIndex : ${raceResult.irvRounds}">
+                <tr th:each="round : ${raceResult.irvRounds}">
                     <table>
                         <tr>
-                            <th th:text="${roundIndex.index}"></th>
+                            <th th:text="${round.roundNo}"></th>
+                            <th th:text="(${round.comment})"></th>
                         </tr>
                         <tr>
                             <th>Candidate</th>
                             <th>Votes</th>
                         </tr>
-                        <tr th:each="vote : ${round}">
+                        <tr th:each="vote : ${round.voteResults}">
                             <!--suppress HtmlUnknownAttribute -->
                             <td th:text="${vote.candidate}"></td>
                             <!--suppress HtmlUnknownAttribute -->

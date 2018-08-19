@@ -36,4 +36,6 @@ public interface VoterService {
 	Rank rankForOrder(Voter voter, int order);
 
 	List<Rank> ranksForVoterByRankValue(Voter voter);
+
+	void revote(Race race);
 }

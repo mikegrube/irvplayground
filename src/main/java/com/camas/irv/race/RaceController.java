@@ -122,4 +122,14 @@ public class RaceController {
 		return "raceTabulation";
 	}
 
+	@GetMapping("/revote/{id}")
+	public String revote(@PathVariable Long id, Model model) {
+
+		Race race = service.get(id);
+
+		service.revote(race);
+
+		return "redirect:/race/" + race.getId();
+	}
+
 }

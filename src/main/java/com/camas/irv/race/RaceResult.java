@@ -21,9 +21,9 @@ public class RaceResult {
 
 	private Race race;
 
-	private List<VoteResult> pluralityResult = new ArrayList<>();
+	private VotingRound pluralityResult = new VotingRound(0, "A single round can be won by plurality.");
 
-	private List<List<VoteResult>> irvRounds = new ArrayList<>();
+	private List<VotingRound> irvRounds = new ArrayList<>();
 
 	public RaceResult(RaceService raceService, VoterService voterService, Race race) {
 		this.race = race;
@@ -31,6 +31,7 @@ public class RaceResult {
 		this.voterService = voterService;
 
 		List<Voter> voters = voterService.votersForRaceWithRanks(race);
+		int voterCt = voters.size();
 
 		//Make a VoteResult for each candidate
 		List<Candidate> candidates = raceService.candidatesForRace(race);
@@ -45,24 +46,31 @@ public class RaceResult {
 		//Create rounds for irv until only two candidates are left
 
 		//Create the first round with all candidates (same as plurality)
-		irvRounds.add(pluralityResult);
+		irvRounds.add(duplicateRound(pluralityResult));
 
-		log.info("Starting irv rounds");
-
-		List<VoteResult> lastRound = pluralityResult;
+		VotingRound lastRound = pluralityResult;
 
 		//While there are more than two candidates still in play, create another round
-		if (lastRound.size() > 2) {
+		//Stop if one candidate has > 50% of all voters' votes
+		while (lastRound.size() > 2) {
+
+			if (lastRound.anyMajority(voterCt)) {
+				break;
+			}
 
 			//Find the in-play candidate with the fewest votes and remove
-			VoteResult least = null;
-			for (VoteResult voteResult : lastRound) {
-				if (least == null || voteResult.getVotes() < least.getVotes()) {
-					least = voteResult;
+			//If there is a tie for least, all tied are removed and votes redistributed
+			List<VoteResult> leasts = new ArrayList<>();
+			for (VoteResult voteResult : lastRound.getVoteResults()) {
+				if (leasts.size() == 0 || voteResult.getVotes() == leasts.get(0).getVotes()) {
+					leasts.add(voteResult);
+				} else if (voteResult.getVotes() < leasts.get(0).getVotes()) {
+					leasts = new ArrayList<>();
+					leasts.add(voteResult);
 				}
 			}
 
-			List<VoteResult> newRound = makeNewRound(lastRound, least.getCandidate());
+			VotingRound newRound = lastRound.makeNewRound(leasts);
 
 			//Redistribute that candidate's highest-ranked votes among other in-play candidates
 			applyVotes(voters, newRound);
@@ -73,30 +81,34 @@ public class RaceResult {
 
 		}
 
+		if (lastRound.size() == 2) {
+			//If tied, break tie on greater number of #1 votes
+
+		}
 	}
 
-	private List<VoteResult> makeNewRound(List<VoteResult> previousRound, Candidate minusCandidate) {
+	private VotingRound duplicateRound(VotingRound previousVotingRound) {
 
-		List<VoteResult> voteResults = new ArrayList<>();
+		VotingRound votingRound = new VotingRound(0, "First IRV round is the same as the only plurality round.");
 
-		for (VoteResult voteResult : previousRound) {
-			if (!voteResult.getCandidate().equals(minusCandidate)) {
-				voteResults.add(new VoteResult(voteResult.getCandidate()));
-			}
+		for (VoteResult voteResult : previousVotingRound.getVoteResults()) {
+
+			VoteResult newVoteResult = new VoteResult(voteResult.getCandidate());
+			newVoteResult.setVotes(voteResult.getVotes());
+			votingRound.add(newVoteResult);
 		}
 
-		return voteResults;
+		return votingRound;
 	}
 
-	private void applyVotes(List<Voter> voters, List<VoteResult> voteResults) {
+	private void applyVotes(List<Voter> voters, VotingRound votingRound) {
 
 		for (Voter voter : voters) {
 			List<Rank> ranks = voterService.ranksForVoterByRankValue(voter);
-			log.info("Voter: " + voter.getId());
 			boolean found = false;
 			for (Rank rank : ranks) {
 				if (rank.getRankValue() != 0) {
-					for (VoteResult voteResult : voteResults) {
+					for (VoteResult voteResult : votingRound.getVoteResults()) {
 						if (!found && rank.getCandidate().equals(voteResult.getCandidate())) {
 							voteResult.addVote();
 							found = true;
@@ -117,21 +129,103 @@ public class RaceResult {
 		this.race = race;
 	}
 
-	public List<VoteResult> getPluralityResult() {
+	public VotingRound getPluralityResult() {
 		return pluralityResult;
 	}
 
-	public void setPluralityResult(List<VoteResult> pluralityResult) {
+	public void setPluralityResult(VotingRound votingRound) {
 		this.pluralityResult = pluralityResult;
 	}
 
-	public List<List<VoteResult>> getIrvRounds() {
+	public List<VotingRound> getIrvRounds() {
 		return irvRounds;
 	}
 
-	public void setIrvRounds(List<List<VoteResult>> irvRounds) {
+	public void setIrvRounds(List<VotingRound> irvRounds) {
 		this.irvRounds = irvRounds;
 	}
+}
+
+class VotingRound {
+
+	private int roundNo;
+	private List<VoteResult> voteResults = new ArrayList<>();
+	private String comment;
+
+	public VotingRound(int roundNo, String comment) {
+		this.roundNo = roundNo;
+		this.comment = comment;
+	}
+
+	public int getRoundNo() {
+		return roundNo;
+	}
+
+	public void setRoundNo(int roundNo) {
+		this.roundNo = roundNo;
+	}
+
+	public List<VoteResult> getVoteResults() {
+		return voteResults;
+	}
+
+	public void setVoteResults(List<VoteResult> voteResults) {
+		this.voteResults = voteResults;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	public void add(VoteResult voteResult) {
+		voteResults.add(voteResult);
+	}
+
+	public int size() {
+		return voteResults.size();
+	}
+
+	public boolean anyMajority(int voterCt) {
+
+		int majority = (voterCt / 2) + 1;
+
+		for (VoteResult voteResult : voteResults) {
+			if (voteResult.getVotes() >= (majority)) {
+				return true;
+			}
+		}
+
+		return false;
+
+	}
+
+	public VotingRound makeNewRound(List<VoteResult> leasts) {
+
+		VotingRound newVotingRound = new VotingRound(roundNo+1, "Removing the candidate with the least votes.");
+		if (leasts.size() > 1) {
+			newVotingRound.setComment("Removing multiple candidates tied for the least votes.");
+		}
+
+		for (VoteResult voteResult : voteResults) {
+
+			boolean ok = true;
+			for (VoteResult leastResult : leasts) {
+				if (voteResult.getCandidate().equals(leastResult.getCandidate())) {
+					ok = false;
+				}
+			}
+			if (ok) {
+				newVotingRound.add(new VoteResult(voteResult.getCandidate()));
+			}
+		}
+
+		return newVotingRound;
+	}
+
 }
 
 class VoteResult {

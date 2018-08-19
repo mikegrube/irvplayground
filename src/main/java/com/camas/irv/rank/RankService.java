@@ -26,4 +26,5 @@ public interface RankService {
 
 	List<Rank> ranksForVoterByRank(Voter voter);
 
+	void deleteByVoter(Voter voter);
 }

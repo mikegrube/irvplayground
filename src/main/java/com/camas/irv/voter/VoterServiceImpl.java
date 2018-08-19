@@ -172,4 +172,16 @@ public class VoterServiceImpl implements VoterService {
 		return rankService.ranksForVoterByRank(voter);
 	}
 
+	@Override
+	public void revote(Race race) {
+
+		List<Voter> voters = repository.findByRaceOrderById(race);
+
+		for (Voter voter : voters) {
+			rankService.deleteByVoter(voter);
+			rankService.makeDummyRanks(voter);
+		}
+
+	}
+
 }

@@ -10,5 +10,7 @@ interface VoterRepository extends CrudRepository<Voter, Long> {
 	Iterable<Voter> findByOrderById();
 
 	List<Voter> findByRaceOrderById(Race race);
+
+	void deleteByRace(Race race);
 }
 

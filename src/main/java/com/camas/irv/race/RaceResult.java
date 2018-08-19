@@ -55,6 +55,7 @@ public class RaceResult {
 		while (lastRound.size() > 2) {
 
 			if (lastRound.anyMajority(voterCt)) {
+				lastRound.setComment("One candidate has a majority.");
 				break;
 			}
 
@@ -82,7 +83,28 @@ public class RaceResult {
 		}
 
 		if (lastRound.size() == 2) {
-			//If tied, break tie on greater number of #1 votes
+			//If tied, break tie on greater number of #1 votes (pluralityResult has first round)
+			VoteResult winner1 = lastRound.getVoteResults().get(0);
+			VoteResult winner2 = lastRound.getVoteResults().get(1);
+			int winner1Ct = 0;
+			int winner2Ct = 0;
+			if (winner1.getVotes() == winner2.getVotes()) {
+				for (VoteResult voteResult : pluralityResult.getVoteResults()) {
+					if (voteResult.getCandidate().equals(winner1.getCandidate())) {
+						winner1Ct = voteResult.getVotes();
+					}
+					if (voteResult.getCandidate().equals(winner2.getCandidate())) {
+						winner2Ct = voteResult.getVotes();
+					}
+					if (winner1Ct > winner2Ct) {
+						lastRound.setComment(winner1.getCandidate().getName() + " wins based on having more 1st place votes.");
+					} else if (winner2Ct > winner1Ct) {
+						lastRound.setComment(winner2.getCandidate().getName() + " wins based on having more 1st place votes.");
+					} else {
+						lastRound.setComment("Tied winners have equal 1st place votes.");
+					}
+				}
+			}
 
 		}
 	}

@@ -1,5 +1,6 @@
 package com.camas.irv.voter;
 
+import com.camas.irv.DummyService;
 import com.camas.irv.candidate.Candidate;
 import com.camas.irv.candidate.CandidateService;
 import com.camas.irv.race.Race;
@@ -44,6 +45,12 @@ public class VoterServiceImpl implements VoterService {
 		this.candidateService = candidateService;
 	}
 
+	private DummyService dummyService;
+	@Autowired
+	public void setDummyService(DummyService dummyService) {
+		this.dummyService = dummyService;
+	}
+
 	@Override
 	public Iterable<Voter> list() {
 		return repository.findByOrderById();
@@ -80,20 +87,6 @@ public class VoterServiceImpl implements VoterService {
 		}
 
 		return voters;
-	}
-
-	@Override
-	public void makeDummyVoters(Race race) {
-
-		for (int i = 0; i < race.getVoterCount(); i++) {
-			Voter voter = new Voter();
-			voter.setRace(race);
-			voter = save(voter);
-
-			//Add ranks
-			rankService.makeDummyRanks(voter);
-		}
-
 	}
 
 	@Override
@@ -179,7 +172,20 @@ public class VoterServiceImpl implements VoterService {
 
 		for (Voter voter : voters) {
 			rankService.deleteByVoter(voter);
-			rankService.makeDummyRanks(voter);
+			dummyService.createRanks(voter);
+		}
+
+	}
+
+	@Override
+	public void removeCandidateVotes(Candidate candidate) {
+
+		List<Voter> voters = repository.findByRaceOrderById(candidate.getRace());
+
+		for (Voter voter : voters) {
+			rankService.deleteByVoter(voter);
+			//TODO: Need to remove the candidate before making dummy votes
+			dummyService.createRanks(voter);
 		}
 
 	}

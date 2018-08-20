@@ -19,11 +19,11 @@ public interface RaceService {
 
 	int candidateCountForRace(Race race);
 
-	Race makeDummyRace();
-
 	List<Voter> votersForRace(Race race);
 
 	RaceResult tabulate(Race race);
 
 	void revote(Race race);
+
+	void removeCandidateFromRace(Candidate candidate);
 }

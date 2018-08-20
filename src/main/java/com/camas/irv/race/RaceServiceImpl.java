@@ -73,24 +73,6 @@ public class RaceServiceImpl implements RaceService {
 	}
 
 	@Override
-	public Race makeDummyRace() {
-
-		//Create the race
-		Race race = new Race();
-		race.setName("Local Election");
-		race.setVoterCount(10);
-		race = save(race);
-
-		//Add candidates
-		candidateService.makeDummyCandidates(race);
-
-		//Add voters
-		voterService.makeDummyVoters(race);
-
-		return race;
-	}
-
-	@Override
 	public List<Voter> votersForRace(Race race) {
 
 		return voterService.votersForRaceWithRanks(race);
@@ -108,6 +90,12 @@ public class RaceServiceImpl implements RaceService {
 
 		voterService.revote(race);
 
+	}
+
+	@Override
+	public void removeCandidateFromRace(Candidate candidate) {
+
+		voterService.removeCandidateVotes(candidate);
 	}
 
 }

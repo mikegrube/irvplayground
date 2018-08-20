@@ -26,7 +26,7 @@ public class RankController {
 	public void setService(RankService service) {
 		this.service = service;
 	}
-
+/*
 	//List
 
 	@GetMapping("/list")
@@ -95,5 +95,5 @@ public class RankController {
 
 		return "redirect:/rank/list";
 	}
-
+*/
 }

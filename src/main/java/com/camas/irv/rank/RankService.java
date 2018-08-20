@@ -20,8 +20,6 @@ public interface RankService {
 
 	Iterable<Voter> availableVoters();
 
-	void makeDummyRanks(Voter voter);
-
 	List<Rank> ranksForVoter(Voter voter);
 
 	List<Rank> ranksForVoterByRank(Voter voter);

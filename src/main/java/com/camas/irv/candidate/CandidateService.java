@@ -22,5 +22,4 @@ public interface CandidateService {
 
 	Race findRace(Long raceId);
 
-	void makeDummyCandidates(Race race);
 }

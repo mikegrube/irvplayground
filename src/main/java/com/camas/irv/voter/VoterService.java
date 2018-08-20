@@ -21,8 +21,6 @@ public interface VoterService {
 
 	List<Voter> votersForRaceWithRanks(Race race);
 
-	void makeDummyVoters(Race race);
-
 	int raceCandidateCt(Race race);
 
 	List<Rank> ranksForVoter(Voter voter);
@@ -38,4 +36,6 @@ public interface VoterService {
 	List<Rank> ranksForVoterByRankValue(Voter voter);
 
 	void revote(Race race);
+
+	void removeCandidateVotes(Candidate candidate);
 }

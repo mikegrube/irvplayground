@@ -43,6 +43,9 @@ public class CandidateServiceImpl implements CandidateService {
 
 	@Override
 	public void delete(Long id) {
+
+		raceService.removeCandidateFromRace(get(id));
+
 		repository.deleteById(id);
 	}
 
@@ -64,29 +67,6 @@ public class CandidateServiceImpl implements CandidateService {
 	@Override
 	public Race findRace(Long raceId) {
 		return raceService.get(raceId);
-	}
-
-	@Override
-	public void makeDummyCandidates(Race race) {
-
-		Candidate candidate = new Candidate();
-		candidate.setName("John Blue");
-		candidate.setAffiliation(Affiliation.BLUE);
-		candidate.setRace(race);
-		save(candidate);
-
-		candidate = new Candidate();
-		candidate.setName("Mary Green");
-		candidate.setAffiliation(Affiliation.GREEN);
-		candidate.setRace(race);
-		save(candidate);
-
-		candidate = new Candidate();
-		candidate.setName("Paula Red");
-		candidate.setAffiliation(Affiliation.RED);
-		candidate.setRace(race);
-		save(candidate);
-
 	}
 
 }

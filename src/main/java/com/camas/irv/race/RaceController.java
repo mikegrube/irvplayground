@@ -1,5 +1,6 @@
 package com.camas.irv.race;
 
+import com.camas.irv.DummyService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,12 @@ public class RaceController {
 		this.service = service;
 	}
 
+	private DummyService dummyService;
+	@Autowired
+	public void setDummyService(DummyService dummyService) {
+		this.dummyService = dummyService;
+	}
+
 	//List
 
 	@GetMapping("/list")
@@ -41,9 +48,7 @@ public class RaceController {
 
 		//Build a race if there aren't any
 		if (!found) {
-			Race race = service.makeDummyRace();
-			race.setCandidateCount(service.candidateCountForRace(race));
-			races.add(race);
+			races.add(dummyService.makeDummyRace());
 		}
 
 		model.addAttribute("races", races);

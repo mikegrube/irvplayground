@@ -26,7 +26,7 @@ public class CandidateController {
 	public void setService(CandidateService service) {
 		this.service = service;
 	}
-
+/*
 	//List
 
 	@GetMapping("/list")
@@ -36,7 +36,7 @@ public class CandidateController {
 
 		return "candidateList";
 	}
-
+*/
 	//Show
 
 	@GetMapping("/{id}")
@@ -47,7 +47,7 @@ public class CandidateController {
 
 		return "candidateShow";
 	}
-
+/*
 	//Create
 
 	@GetMapping("/new")
@@ -59,7 +59,7 @@ public class CandidateController {
 
 		return "candidateEdit";
 	}
-
+*/
 	@GetMapping("/newWithRace/{raceId}")
 	public String createWithRace(@PathVariable Long raceId, Model model) {
 

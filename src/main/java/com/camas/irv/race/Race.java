@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
+import javax.validation.constraints.Max;
 import java.util.List;
 
 @Entity
@@ -16,6 +17,8 @@ public class Race {
 	private Long id;
 
 	private String name;
+
+	@Max(50)
 	private int voterCount;
 
 	@Transient

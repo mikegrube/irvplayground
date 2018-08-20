@@ -85,7 +85,7 @@ public class CandidateController {
 
 		candidate = service.save(candidate);
 
-		return "redirect:/candidate/" + candidate.getId();
+		return "redirect:/race/" + candidate.getRace().getId();
 	}
 
 	//Update

@@ -178,16 +178,11 @@ public class VoterServiceImpl implements VoterService {
 	}
 
 	@Override
-	public void removeCandidateVotes(Candidate candidate) {
-
-		List<Voter> voters = repository.findByRaceOrderById(candidate.getRace());
-
-		for (Voter voter : voters) {
-			rankService.deleteByVoter(voter);
-			//TODO: Need to remove the candidate before making dummy votes
-			dummyService.createRanks(voter);
+	public void dropRanks(Voter voter) {
+		List<Rank> ranks = rankService.ranksForVoter(voter);
+		for (Rank rank : ranks) {
+			rankService.delete(rank.getId());
 		}
-
 	}
 
 }

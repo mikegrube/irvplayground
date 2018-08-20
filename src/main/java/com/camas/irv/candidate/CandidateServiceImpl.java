@@ -38,15 +38,23 @@ public class CandidateServiceImpl implements CandidateService {
 
 	@Override
 	public Candidate save(Candidate candidate) {
-		return repository.save(candidate);
+
+		candidate = repository.save(candidate);
+
+		raceService.revote(candidate.getRace());
+
+		return candidate;
 	}
 
 	@Override
 	public void delete(Long id) {
 
-		raceService.removeCandidateFromRace(get(id));
+		Candidate candidate = get(id);
+		Race race = candidate.getRace();
 
 		repository.deleteById(id);
+
+		raceService.revote(race);
 	}
 
 	@Override

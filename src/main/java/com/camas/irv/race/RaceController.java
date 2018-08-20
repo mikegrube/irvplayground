@@ -48,7 +48,10 @@ public class RaceController {
 
 		//Build a race if there aren't any
 		if (!found) {
-			races.add(dummyService.makeDummyRace());
+			Race race = dummyService.makeDummyRace();
+			race.setCandidateCount(service.candidateCountForRace(race));
+			races.add(race);
+
 		}
 
 		model.addAttribute("races", races);

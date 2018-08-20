@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
@@ -63,8 +64,6 @@ public class DummyServiceImpl implements DummyService {
 		race.setVoterCount(10);
 		race = raceService.save(race);
 
-		race.setCandidateCount(raceService.candidateCountForRace(race));
-
 		return race;
 	}
 
@@ -90,14 +89,34 @@ public class DummyServiceImpl implements DummyService {
 
 	}
 
-	private void createVoters(Race race) {
+	@Override
+	public void createVoters(Race race) {
 
-		for (int i = 0; i < race.getVoterCount(); i++) {
-			Voter voter = new Voter();
-			voter.setRace(race);
-			voter = voterService.save(voter);
+		//We need to deal with existing voters
 
-			//Add ranks
+		List<Voter> voters = voterService.votersForRaceWithRanks(race);
+		int existingVoterCt = voters.size();
+		int neededVoterCt = race.getVoterCount();
+
+		if (neededVoterCt > existingVoterCt) {
+			for (int i = existingVoterCt; i < neededVoterCt; i++) {
+				Voter voter = new Voter();
+				voter.setRace(race);
+				voter = voterService.save(voter);
+				voters.add(voter);
+			}
+		} else if (neededVoterCt < existingVoterCt) {
+			for (int i = existingVoterCt -1; i >= neededVoterCt; i--) {
+				Voter voter = voters.get(i);
+				voters.remove(voter);
+				voterService.delete(voter.getId());
+			}
+
+		}
+
+		for (Voter voter : voters) {
+
+			voterService.dropRanks(voter);
 			createRanks(voter);
 		}
 
@@ -105,6 +124,9 @@ public class DummyServiceImpl implements DummyService {
 
 	@Override
 	public void createRanks(Voter voter) {
+
+		//We need to deal with existing ranks; drop? or reuse
+		voterService.dropRanks(voter);
 
 		Iterable<Candidate> candidates = candidateService.candidatesforRace(voter.getRace());
 

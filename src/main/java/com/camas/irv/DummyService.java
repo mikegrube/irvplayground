@@ -8,6 +8,8 @@ public interface DummyService {
 
 	Race makeDummyRace();
 
+	void createVoters(Race race);
+
 	void createRanks(Voter voter);
 
 }

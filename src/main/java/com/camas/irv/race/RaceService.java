@@ -25,5 +25,4 @@ public interface RaceService {
 
 	void revote(Race race);
 
-	void removeCandidateFromRace(Candidate candidate);
 }

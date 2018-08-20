@@ -1,5 +1,6 @@
 package com.camas.irv.race;
 
+import com.camas.irv.DummyService;
 import com.camas.irv.candidate.Affiliation;
 import com.camas.irv.candidate.Candidate;
 import com.camas.irv.candidate.CandidateRepository;
@@ -35,6 +36,12 @@ public class RaceServiceImpl implements RaceService {
 		this.voterService = voterService;
 	}
 
+	private DummyService dummyService;
+	@Autowired
+	public void setDummyService(DummyService dummyService) {
+		this.dummyService = dummyService;
+	}
+
 	@Override
 	public List<Race> list() {
 		return repository.findByOrderByName();
@@ -47,12 +54,21 @@ public class RaceServiceImpl implements RaceService {
 
 	@Override
 	public Race save(Race race) {
-		return repository.save(race);
+
+		race = repository.save(race);
+
+		//Voting needs to be redone; voter count could have changed
+		dummyService.createVoters(race);
+		revote(race);
+
+		return race;
 	}
 
 	@Override
 	public void delete(Long id) {
+
 		repository.deleteById(id);
+
 	}
 
 	@Override
@@ -90,12 +106,6 @@ public class RaceServiceImpl implements RaceService {
 
 		voterService.revote(race);
 
-	}
-
-	@Override
-	public void removeCandidateFromRace(Candidate candidate) {
-
-		voterService.removeCandidateVotes(candidate);
 	}
 
 }

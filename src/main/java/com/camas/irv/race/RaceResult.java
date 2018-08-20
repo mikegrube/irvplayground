@@ -101,7 +101,7 @@ public class RaceResult {
 					} else if (winner2Ct > winner1Ct) {
 						lastRound.setComment(winner2.getCandidate().getName() + " wins based on having more 1st place votes.");
 					} else {
-						lastRound.setComment("Tied winners have equal 1st place votes.");
+						lastRound.setComment("Tied winners have equal 1st place votes (unlikely with many votes).");
 					}
 				}
 			}

@@ -37,5 +37,5 @@ public interface VoterService {
 
 	void revote(Race race);
 
-	void removeCandidateVotes(Candidate candidate);
+	void dropRanks(Voter voter);
 }

@@ -68,6 +68,11 @@ public class VoterServiceImpl implements VoterService {
 
 	@Override
 	public void delete(Long id) {
+
+		Voter voter = get(id);
+
+		dropRanks(voter);
+
 		repository.deleteById(id);
 	}
 
